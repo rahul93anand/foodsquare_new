@@ -12,7 +12,7 @@ def ContactUs(request):
         email = detail.get("email")
         message = detail.get("message")
         send_mail("Hey We got a message from " + name, message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
-        
+
         return render(request,"index.html",{'status' : "Message sent"})
 
 
