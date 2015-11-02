@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$', views.WelcomePage),
     url(r'^contact_us', views.ContactUs),
     url(r'^signin', views.SignIn),
+    url(r'^register', views.Register),
 ]
