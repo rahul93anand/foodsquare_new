@@ -77,4 +77,5 @@ def Register(request):
 
 
 
-
+def Restaurant_Menu(request):
+    return render(request,'rest_menu.html')
