@@ -63,10 +63,10 @@ def Register(request):
                     user.email= email
                     user.password = make_password(password=password,salt=None,hasher='unsalted_md5')
                     user.save()
-                    send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
+                    #send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
+                    return HttpResponse("SUCCESS kindly proceed with log in")
                 except:
                     return HttpResponse("Username already in use")
-                return render(request,'register.html')
             else:
                 return HttpResponse("Sorry you are already registered with email id : " + email)
         else:

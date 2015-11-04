@@ -55,7 +55,15 @@ var username = $("#username").val();
           csrfmiddlewaretoken: '{{csrf_token}}'
          },
         function(data,status){
+
+        if(data == "SUCCESS kindly proceed with log in")
+        {
+        location.href="http://foodsquare10.pythonanywhere.com/login";
+        }
+        else
+        {
                $("#h10").text(data);
+               }
         });
 
 });
