@@ -49,3 +49,12 @@
 #portfolio * {
     z-index: 2;
 }
+
+
+.logo
+{
+color: #ffffff;
+
+
+
+}

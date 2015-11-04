@@ -22,7 +22,7 @@
           <h1 class="text-center">Login</h1>
       </div>
       <div class="modal-body">
-          <form action="/signin/"  method="post" class="form col-md-12 center-block">
+          <form aclass="form col-md-12 center-block">
               {% csrf_token %}
             <div class="form-group">
 
@@ -32,8 +32,9 @@
               <input name="password" type="password" id="password" class="form-control input-lg" placeholder="Password">
             </div>
             <div class="form-group">
-              <input class=".btn-success" type="submit" value="Signin">
+              <input class=".btn-success" type="Button" id="signin" value="Signin">
               <span class="pull-right"><a href="/register">Register</a></span>
+                <h10 id="h10"></h10>
             </div>
           </form>
 
@@ -49,7 +50,35 @@
 	<!-- script references -->
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script>
-    csrf_token = {% csrf_token %};
+
+   $(document).ready(function(){
+
+
+
+$("#signin").click(function(){
+
+
+var email = $("#email").val();
+var password = $("#password").val();
+
+    $.post("/signin/",
+        {
+
+          email: email,
+          password: password,
+          csrfmiddlewaretoken: '{{csrf_token}}'
+         },
+        function(data,status){
+               $("#h10").text(data);
+        });
+
+});
+
+
+
+
+
+});
 </script>
 
 		<script src="/static/login_static_files/js/signin.js"></script>

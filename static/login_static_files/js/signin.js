@@ -13,7 +13,7 @@ var password = $("#password").val();
 
           email: email,
           password: password,
-          csrfmiddlewaretoken: csrf_token
+          csrfmiddlewaretoken: '{{csrf_token}}'
          },
         function(data,status){
                 alert(data);
