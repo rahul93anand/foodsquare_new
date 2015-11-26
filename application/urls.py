@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^signin', views.SignIn),
     url(r'^register', views.Register),
     url(r'^rest_menu', views.Restaurant_Menu),
+    url(r'^load_menu/(?P<menu_name>[\w-]+)$', views.Load_Menu),
 
 ]
