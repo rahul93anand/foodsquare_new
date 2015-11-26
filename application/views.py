@@ -3,10 +3,47 @@ from django.shortcuts import render, HttpResponse,redirect
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from application.models import menu
+from application.models import menu, orderplaced
+from datetime import date, timedelta
+import time
+
+def changestatus(request):
+    if request.method == "POST":
+        incoming_dict = request.POST
+        order_number = incoming_dict.get('order_id')
+        order_status = incoming_dict.get('order_status')
+
+        orderplaced.objects.filter(order_id =order_number).update(status = order_status)
+        print "Saved"
+        return HttpResponse("Yo mofo")
+    else:
+        return render(request,"changestatus.html")
 
 
 
+def LiveTracking(request):
+    if request.method == "POST":
+        incoming_dict = request.POST
+        order_no = incoming_dict.get('order_number')
+        img = ""
+        try:
+            order_status = orderplaced.objects.get(order_id = order_no).status
+            username = orderplaced.objects.get(order_id = order_no).username
+            placed_on = orderplaced.objects.get(order_id = order_no).placed_on
+            order_id = orderplaced.objects.get(order_id = order_no).order_id
+
+
+            return render(request,'livetracking/index.html',{'order_status' : order_status,'order_id' : order_id, 'username' : username , 'placed_on' : placed_on})
+        except:
+            print "error"
+
+
+    else:
+        return render(request, "livetracking.html")
+    return HttpResponse("Live tracking over here bitch")
+
+
+#20151126223505
 
 
 def Load_Menu(request, **kwargs):
@@ -21,7 +58,9 @@ def Load_Menu(request, **kwargs):
             only_dish = str(x)
             list.append(only_dish)
         print list
+
         return render(request,'load_menu.html',{'list' : list})
+
     else:
         return redirect('/signin')
 
@@ -35,11 +74,36 @@ def PlaceOrder(request):
         print incoming_dict.get('dishes')
         message = "Order Has been placed" + "Order is                 " + order
         print message
-        send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
+        username = request.user
+        date_token = str(date.today())
+        current_time =  str(time.strftime("%H:%M:%S"))
+        order_id = ""
+        for x in date_token:
+            if x is "-":
+                pass
+            else:
+                order_id = order_id + x
+
+        for x in current_time:
+            if x is ":":
+                pass
+            else:
+                order_id = order_id + x
+
+
+        print "%%%"*10
+        name = str(request.user)
+        print name
+        print orderplaced.objects.all()
+        new_order = orderplaced.objects.create(username=name,order = order, order_id = order_id)
+        print orderplaced.objects.all()
+
+
+        #end_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
         #send_mail("Thanks For Ordering" , "Dear " +  request.user + " Your food will reach you shortly!", "foodsquare10@gmail.com", [])
 
 
-    return HttpResponse("Order Received")
+    return HttpResponse(order_id)
 
 
 

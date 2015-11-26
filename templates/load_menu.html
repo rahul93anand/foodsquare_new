@@ -28,13 +28,15 @@
     <h1>You Have ordered :</h1>
     <p1><b>Your order comes over here</b></p1>
     <br>
-    <button id="placeorder" > Place Order </button>
+    <button id="placeorder" > Place Order </button><br>
+    <h id="orderplaced"> </h>
 </div>
 
 </body>
 <script>
 var dish =""
 var final_order = ""
+var mimic_order
 var count = 0
     $(document).ready(function()
     {
@@ -42,6 +44,7 @@ var count = 0
           $(".list-group").on('click','li',function (){
           count = count + 1;
           dish = $(this).text();
+          mimic_order = mimic_order + "     " +  dish
           final_order = "<p>" + final_order  + "</p>"+ "[" + count + "]" + dish
           $("p1").html(final_order);
 
@@ -53,11 +56,12 @@ $("#placeorder").click(function()
 alert(final_order);
 $.post("/placeorder/",
         {
-          dishes : final_order,
+          dishes : mimic_order,
            csrfmiddlewaretoken: '{{csrf_token}}'
         },
         function(data,status){
             alert("Data: " + data + "\nStatus: " + status);
+            $("#orderplaced").html("Thanks for placing your order. Your order number is  : " + data);
         });
 
 });

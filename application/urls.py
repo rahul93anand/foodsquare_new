@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^profile', views.Profile),
     url(r'^load_menu/(?P<menu_name>[\w-]+)$', views.Load_Menu),
     url(r'^placeorder/', views.PlaceOrder),
+    url(r'^livetracking/', views.LiveTracking),
+    url(r'^changestatus/', views.changestatus),
 
 
 ]
