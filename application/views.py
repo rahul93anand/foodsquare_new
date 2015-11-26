@@ -35,7 +35,7 @@ def PlaceOrder(request):
         print incoming_dict.get('dishes')
         message = "Order Has been placed" + "Order is                 " + order
         print message
-        send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
+        #send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
         #send_mail("Thanks For Ordering" , "Dear " +  request.user + " Your food will reach you shortly!", "foodsquare10@gmail.com", [])
 
 

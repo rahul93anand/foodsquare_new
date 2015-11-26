@@ -42,7 +42,7 @@ var count = 0
           $(".list-group").on('click','li',function (){
           count = count + 1;
           dish = $(this).text();
-          final_order = final_order + "[" + count + "]" + dish
+          final_order = "<p>" + final_order  + "</p>"+ "[" + count + "]" + dish
           $("p1").html(final_order);
 
 
