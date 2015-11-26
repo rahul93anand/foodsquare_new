@@ -3,6 +3,44 @@ from django.shortcuts import render, HttpResponse
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from application.models import menu
+
+
+
+
+
+def Load_Menu(request, **kwargs):
+    rest_name = kwargs.get('menu_name')
+    try:
+        items = menu.objects.filter(rest_name = rest_name)
+        list = []
+    except:
+        pass
+    for x in items:
+        only_dish = str(x)
+
+        list.append(only_dish)
+
+
+
+    print list
+
+
+    return render(request,'load_menu.html',{'list' : list})
+
+
+
+def PlaceOrder(request):
+    if request.method == "POST":
+        incoming_dict = request.POST
+        order = ""
+        print incoming_dict.get('dishes')
+        message = "Order Has been placed" + request.user + "Order is                 "  incoming_dict.get('dishes')
+        send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
+        #send_mail("Thanks For sharing" , "Dear " +  name + " thanks for sharing valuable feedback with us, our team will get back to you shortly xD", "foodsquare10@gmail.com", [email])
+
+
+    return HttpResponse("Order Received")
 
 def WelcomePage(request):
     return render(request,"index.html")
@@ -52,8 +90,6 @@ def Register(request):
                 user_registered = True
             except:
                 pass
-
-
             if not user_registered:
                 username = detail.get('username')
                 password = detail.get('password')
@@ -63,7 +99,7 @@ def Register(request):
                     user.email= email
                     user.password = make_password(password=password,salt=None,hasher='unsalted_md5')
                     user.save()
-                    send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
+                    #send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
                     return HttpResponse("SUCCESS kindly proceed with log in")
                 except:
                     return HttpResponse("Username already in use")
@@ -78,4 +114,4 @@ def Register(request):
 
 
 def Restaurant_Menu(request):
-    return render(request,'rest_menu.html')
+    return render(request,'menu/index.html')
