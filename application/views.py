@@ -18,11 +18,7 @@ def Load_Menu(request, **kwargs):
         pass
     for x in items:
         only_dish = str(x)
-
         list.append(only_dish)
-
-
-
     print list
 
 
@@ -42,7 +38,13 @@ def PlaceOrder(request):
 
     return HttpResponse("Order Received")
 
+
+
 def WelcomePage(request):
+    try:
+        print User.objects.all()
+    except:
+        pass
     return render(request,"index.html")
 
 def ContactUs(request):
@@ -70,7 +72,7 @@ def SignIn(request):
                     login(request, user)
                     return HttpResponse("yo signed in")
                 else:
-                    return HttpResponse("Hey you fuckface your account is disabled")
+                    return HttpResponse("Hey your account is disabled")
             else:
                 return HttpResponse("Invalid Id/Password")
         except:
@@ -79,6 +81,7 @@ def SignIn(request):
 
 
 def Register(request):
+
     if request.method=='POST':
         user_registered = False
         detail = request.POST
@@ -110,8 +113,11 @@ def Register(request):
     else:
         return render(request,'register.html')
 
+    return render(request,'register.html')
+
 
 
 
 def Restaurant_Menu(request):
     return render(request,'menu/index.html')
+
