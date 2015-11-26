@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate,login,logout
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse,redirect
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -10,30 +10,33 @@ from application.models import menu
 
 
 def Load_Menu(request, **kwargs):
-    rest_name = kwargs.get('menu_name')
-    try:
-        items = menu.objects.filter(rest_name = rest_name)
-        list = []
-    except:
-        pass
-    for x in items:
-        only_dish = str(x)
-        list.append(only_dish)
-    print list
-
-
-    return render(request,'load_menu.html',{'list' : list})
-
-
+    if request.user.is_authenticated():
+        rest_name = kwargs.get('menu_name')
+        try:
+            items = menu.objects.filter(rest_name = rest_name)
+            list = []
+        except:
+            pass
+        for x in items:
+            only_dish = str(x)
+            list.append(only_dish)
+        print list
+        return render(request,'load_menu.html',{'list' : list})
+    else:
+        return redirect('/signin')
 
 def PlaceOrder(request):
+
     if request.method == "POST":
         incoming_dict = request.POST
         order = ""
+        for x in incoming_dict.get('dishes'):
+            order = order + x
         print incoming_dict.get('dishes')
-        message = "Order Has been placed" + request.user + "Order is                 " + str(incoming_dict.get('dishes'))
+        message = "Order Has been placed" + "Order is                 " + order
+        print message
         send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
-        #send_mail("Thanks For sharing" , "Dear " +  name + " thanks for sharing valuable feedback with us, our team will get back to you shortly xD", "foodsquare10@gmail.com", [email])
+        #send_mail("Thanks For Ordering" , "Dear " +  request.user + " Your food will reach you shortly!", "foodsquare10@gmail.com", [])
 
 
     return HttpResponse("Order Received")
@@ -41,7 +44,7 @@ def PlaceOrder(request):
 
 
 def Profile(request):
-    return render(request, 'profile.html')
+    return redirect('/')
 
 
 def WelcomePage(request):
