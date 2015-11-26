@@ -42,7 +42,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-		  </div>	
+		  </div>
       </div>
   </div>
   </div>
@@ -69,7 +69,14 @@ var password = $("#password").val();
           csrfmiddlewaretoken: '{{csrf_token}}'
          },
         function(data,status){
+                if(data == "yo signed in")
+                {
+               location.href="http://foodsquare10.pythonanywhere.com/profile";
+                }
+                else
+                {
                $("#h10").text(data);
+                }
         });
 
 });

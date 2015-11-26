@@ -4,6 +4,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
+def Profile(request):
+    return render(request, 'profile.html')
+
+
 def WelcomePage(request):
     return render(request,"index.html")
 
@@ -46,6 +50,7 @@ def Register(request):
         detail = request.POST
         email = detail.get('email')
         email_domain_check = email.split('@')
+        new_password = ""
         if email_domain_check[1] == 'st.niituniversity.in' or email_domain_check[1] == 'niituniversity.in':
             try:
                 User.objects.get(email=email)
@@ -59,9 +64,8 @@ def Register(request):
                 password = detail.get('password')
                 print(request.POST)
                 try:
-                    user = User.objects.create_user(username=username)
-                    user.email= email
-                    user.password = make_password(password=password,salt=None,hasher='unsalted_md5')
+                    new_passsword = make_password(password=password,salt=None,hasher='unsalted_md5')
+                    user = User.objects.create_user(username=username,email = email, password = new_password)
                     user.save()
                     send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
                     return HttpResponse("SUCCESS kindly proceed with log in")
