@@ -9,5 +9,8 @@ urlpatterns = [
     url(r'^register', views.Register),
     url(r'^rest_menu', views.Restaurant_Menu),
     url(r'^profile', views.Profile),
+    url(r'^load_menu/(?P<menu_name>[\w-]+)$', views.Load_Menu),
+    url(r'^placeorder/', views.PlaceOrder),
+
 
 ]

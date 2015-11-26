@@ -3,12 +3,52 @@ from django.shortcuts import render, HttpResponse
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from application.models import menu
+
+
+
+
+
+def Load_Menu(request, **kwargs):
+    rest_name = kwargs.get('menu_name')
+    try:
+        items = menu.objects.filter(rest_name = rest_name)
+        list = []
+    except:
+        pass
+    for x in items:
+        only_dish = str(x)
+        list.append(only_dish)
+    print list
+
+
+    return render(request,'load_menu.html',{'list' : list})
+
+
+
+def PlaceOrder(request):
+    if request.method == "POST":
+        incoming_dict = request.POST
+        order = ""
+        print incoming_dict.get('dishes')
+        message = "Order Has been placed" + request.user + "Order is                 "  incoming_dict.get('dishes')
+        send_mail("Incoming Order " , message, 'foodsquare10@gmail.com', ['foodsquare10@gmail.com'])
+        #send_mail("Thanks For sharing" , "Dear " +  name + " thanks for sharing valuable feedback with us, our team will get back to you shortly xD", "foodsquare10@gmail.com", [email])
+
+
+    return HttpResponse("Order Received")
+
+
 
 def Profile(request):
     return render(request, 'profile.html')
 
 
 def WelcomePage(request):
+    try:
+        print User.objects.all()
+    except:
+        pass
     return render(request,"index.html")
 
 def ContactUs(request):
@@ -36,7 +76,7 @@ def SignIn(request):
                     login(request, user)
                     return HttpResponse("yo signed in")
                 else:
-                    return HttpResponse("Hey you fuckface your account is disabled")
+                    return HttpResponse("Hey your account is disabled")
             else:
                 return HttpResponse("Invalid Id/Password")
         except:
@@ -45,6 +85,7 @@ def SignIn(request):
 
 
 def Register(request):
+
     if request.method=='POST':
         user_registered = False
         detail = request.POST
@@ -57,8 +98,6 @@ def Register(request):
                 user_registered = True
             except:
                 pass
-
-
             if not user_registered:
                 username = detail.get('username')
                 password = detail.get('password')
@@ -67,7 +106,7 @@ def Register(request):
                     new_passsword = make_password(password=password,salt=None,hasher='unsalted_md5')
                     user = User.objects.create_user(username=username,email = email, password = new_password)
                     user.save()
-                    send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
+                    #send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
                     return HttpResponse("SUCCESS kindly proceed with log in")
                 except:
                     return HttpResponse("Username already in use")
@@ -78,8 +117,11 @@ def Register(request):
     else:
         return render(request,'register.html')
 
+    return render(request,'register.html')
+
 
 
 
 def Restaurant_Menu(request):
-    return render(request,'rest_menu.html')
+    return render(request,'menu/index.html')
+
