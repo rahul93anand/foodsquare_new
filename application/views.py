@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponse,redirect
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from application.models import menu, orderplaced
+from application.models import menu, orderplaced , verification
 from datetime import date, timedelta
 import time
 
@@ -18,6 +18,28 @@ def changestatus(request):
         return HttpResponse("Yo mofo")
     else:
         return render(request,"changestatus.html")
+
+
+
+def verification(request):
+    if request.method == "POST":
+        incoming_dict = request.POST
+        username = incoming_dict.get('username')
+        verification_number =incoming_dict.get('verification')
+        try:
+            print "coming here"
+            obj = User.objects.filter(username = username).update(is_active= True)
+            print obj
+            return redirect('/')
+        except:
+            print "Entering here"
+            return redirect('/verification/')
+
+    else:
+        return render(request,'verification.html')
+
+
+
 
 
 
@@ -137,15 +159,17 @@ def SignIn(request):
         password = detail.get('password')
         try:
             username = User.objects.get(email=email)
+
             user = authenticate(username=username,password=password)
             if user:
                 if user.is_active:
                     login(request, user)
                     return HttpResponse("yo signed in")
                 else:
-                    return HttpResponse("Hey your account is disabled")
+                    return HttpResponse("Unverified account")
             else:
-                return HttpResponse("Invalid Id/Password")
+                return HttpResponse("Unverified")
+
         except:
             return HttpResponse("Invalid email/password")
     return render(request, 'SignIn.html')
@@ -154,6 +178,9 @@ def SignIn(request):
 def Register(request):
 
     if request.method=='POST':
+
+
+
         user_registered = False
         detail = request.POST
         email = detail.get('email')
@@ -170,10 +197,12 @@ def Register(request):
                 password = detail.get('password')
                 print(request.POST)
                 try:
+
                     new_passsword = make_password(password=password,salt=None,hasher='unsalted_md5')
                     user = User.objects.create_user(username=username,email = email, password = new_password)
+                    user.is_active = False
                     user.save()
-                    #send_mail("Thanks For registering" , "Dear " +  username + " thanks for registering with foodsquare xD", "foodsquare10@gmail.com", [email])
+                    #send_mail("One time registering" , "Dear " +  username + "OTP is : 45654345 "   , "foodsquare10@gmail.com", [email])
                     return HttpResponse("SUCCESS kindly proceed with log in")
                 except:
                     return HttpResponse("Username already in use")

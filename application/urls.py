@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^placeorder/', views.PlaceOrder),
     url(r'^livetracking/', views.LiveTracking),
     url(r'^changestatus/', views.changestatus),
+    url(r'^verification/', views.verification),
 
 
 ]

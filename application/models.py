@@ -36,3 +36,15 @@ class orderplaced(models.Model):
             self.status
         )
 
+class verification(models.Model):
+    verification_number = models.CharField(max_length=10)
+    username = models.CharField(max_length=50)
+    verified = models.BooleanField(default=False)
+    def __unicode__(self):
+
+        return "%s %s %s "  % (
+            self.verification_number,
+            self.username,
+            self.verified
+
+        )
