@@ -202,7 +202,7 @@ def Register(request):
                     user = User.objects.create_user(username=username,email = email, password = new_password)
                     user.is_active = False
                     user.save()
-                    #send_mail("One time registering" , "Dear " +  username + "OTP is : 45654345 "   , "foodsquare10@gmail.com", [email])
+                    send_mail("One time registering" , "Dear " +  username + "OTP is : 45654345 "   , "foodsquare10@gmail.com", [email])
                     return HttpResponse("SUCCESS kindly proceed with log in")
                 except:
                     return HttpResponse("Username already in use")
